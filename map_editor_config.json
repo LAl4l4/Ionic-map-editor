@@ -1,0 +1,19 @@
+{
+  "zoom": {
+    "min": 0.5,
+    "max": 3.0,
+    "wheel_factor": 1.05
+  },
+  "view": {
+    "center_on_load": true
+  },
+  "persist": {
+    "remember_last_view": true
+  },
+  "last_state": {
+    "zoom": 1.14,
+    "offset_x": 107,
+    "offset_y": 57
+  },
+  "last_map": "start_cave"
+}
