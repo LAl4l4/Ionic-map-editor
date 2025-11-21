@@ -212,8 +212,7 @@ class MapEditorQt(QMainWindow):
         self.setWindowTitle(u"mapEditor - Qt6")
         self.setGeometry(100, 100, 1600, 1000)
         
-        # 地图数据
-        self.map_data = None
+        # 地图数据        self.map_data = None
         self.current_map_name = None
         self.basepath = os.path.dirname(os.path.abspath(__file__))
         
@@ -264,6 +263,7 @@ class MapEditorQt(QMainWindow):
     def create_right_panel(self):
         """创建右侧工具栏"""
         panel = QFrame()
+        
         layout = QVBoxLayout(panel)
         
         # 地图文件操作
