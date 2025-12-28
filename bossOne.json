@@ -1,0 +1,533 @@
+{
+  "map_info": {
+    "width": 400,
+    "height": 280,
+    "tilesize": 100
+  },
+  "tile_info": {
+    "1": {
+      "name": "Floor",
+      "path": "",
+      "walkable": true,
+      "upThroughable": true
+    },
+    "2": {
+      "name": "Wall",
+      "path": "",
+      "walkable": false,
+      "upThroughable": false
+    }
+  },
+  "map": [
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ],
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ],
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ],
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ],
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ],
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ],
+    [
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      },
+      {
+        "code": 1,
+        "name": "Floor",
+        "path": "",
+        "walkable": true,
+        "upThroughable": true
+      }
+    ]
+  ],
+  "playerSpawn": {
+    "x": 40,
+    "y": 40
+  },
+  "enemy": [],
+  "entity": []
+}

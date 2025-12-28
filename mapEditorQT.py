@@ -6,7 +6,7 @@ from enum import Enum
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QSpinBox, QComboBox, QCheckBox, QScrollArea,
-    QFrame, QGridLayout, QFileDialog, QMessageBox, QStatusBar
+    QFrame, QGridLayout, QFileDialog, QMessageBox, QStatusBar, QInputDialog
 )
 from PyQt6.QtGui import (
     QColor, QPainter, QPen, QBrush, QFont, QKeySequence
@@ -83,6 +83,10 @@ class MapCanvas(QWidget):
         entities = self.editor.map_data.get('entity', [])
         for entity in entities:
             x, y = entity['position']
+            
+            x = x * 40/self.editor.reltilesize
+            y = y * 40/self.editor.reltilesize
+            
             screen_x = x * self.editor.zoom + self.editor.offset_x
             screen_y = y * self.editor.zoom + self.editor.offset_y
             
@@ -98,6 +102,10 @@ class MapCanvas(QWidget):
         enemies = self.editor.map_data.get('enemy', [])
         for enemy in enemies:
             x, y = enemy['spawn']
+            
+            x = x * 40/self.editor.reltilesize
+            y = y * 40/self.editor.reltilesize
+            
             screen_x = x * self.editor.zoom + self.editor.offset_x
             screen_y = y * self.editor.zoom + self.editor.offset_y
             
@@ -117,6 +125,10 @@ class MapCanvas(QWidget):
         """绘制玩家生成点"""
         spawn = self.editor.map_data.get('playerSpawn', {})
         x, y = spawn.get('x', 0), spawn.get('y', 0)
+        
+        x = x * 40/self.editor.reltilesize
+        y = y * 40/self.editor.reltilesize
+        
         screen_x = x * self.editor.zoom + self.editor.offset_x
         screen_y = y * self.editor.zoom + self.editor.offset_y
         
@@ -268,6 +280,9 @@ class MapEditorQt(QMainWindow):
         
         # 地图文件操作
         layout.addWidget(QLabel(u"<b>地图文件</b>"))
+        new_btn = QPushButton(u"新建地图")
+        new_btn.clicked.connect(self.new_map_dialog)
+        layout.addWidget(new_btn)
         
         load_btn = QPushButton(u"打开地图")
         load_btn.clicked.connect(self.load_map_dialog)
@@ -363,6 +378,13 @@ R：重置视图
         
         layout.addStretch()
         
+        # 选中对象属性编辑面板
+        layout.addWidget(QLabel(u"<b>选中对象属性</b>"))
+        self.props_panel = QFrame()
+        self.props_layout = QVBoxLayout(self.props_panel)
+        self.props_panel.setVisible(False)
+        layout.addWidget(self.props_panel)
+
         # 信息面板
         layout.addWidget(QLabel(u"<b>当前状态</b>"))
         
@@ -371,6 +393,63 @@ R：重置视图
         layout.addWidget(self.status_label)
         
         return panel
+
+    def new_map_dialog(self):
+        """新建地图对话框：输入地图名、宽、长"""
+        # 地图名字
+        name, ok = QInputDialog.getText(self, u"新建地图", u"请输入地图名字：")
+        if not ok or not name.strip():
+            return
+        name = name.strip()
+
+        # 地图宽度（列数）
+        cols, ok = QInputDialog.getInt(self, u"新建地图", u"请输入地图宽度（列数）：", 20, 5, 500)
+        if not ok:
+            return
+
+        # 地图高度（行数）
+        rows, ok = QInputDialog.getInt(self, u"新建地图", u"请输入地图高度（行数）：", 15, 5, 500)
+        if not ok:
+            return
+
+        # 地砖像素大小
+        tilesize, ok = QInputDialog.getInt(self, u"新建地图", u"请输入地砖像素大小（tilesize）：", 40, 16, 256)
+        if not ok:
+            return
+
+        # 生成基础地图结构
+        tile_info = {
+            "1": {"name": "Floor", "path": "", "walkable": True, "upThroughable": True},
+            "2": {"name": "Wall", "path": "", "walkable": False, "upThroughable": False}
+        }
+
+        # 默认地图：全部填充为地砖ID 1
+        grid = [[{"code": 1, "name": "Floor", "path": "", "walkable": True, "upThroughable": True}
+                 for _ in range(cols)] for _ in range(rows)]
+
+        new_map = {
+            "map_info": {"width": cols * tilesize, "height": rows * tilesize, "tilesize": tilesize},
+            "tile_info": tile_info,
+            "map": grid,
+            "playerSpawn": {"x": tilesize, "y": tilesize},
+            "enemy": [],
+            "entity": []
+        }
+
+        # 写入文件
+        filepath = os.path.join(self.basepath, f"{name}.json")
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(new_map, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            QMessageBox.critical(self, u"错误", u"创建地图失败: {}".format(e))
+            return
+
+        # 加载新地图并居中视图
+        if self.load_map(name):
+            self.center_view()
+            self.canvas.update()
+            QMessageBox.information(self, u"成功", u"新地图已创建并打开：{}".format(name))
     
     def load_map(self, map_name=None):
         """加载地图文件"""
@@ -395,6 +474,9 @@ R：重置视图
                 else:
                     self.center_view()
                 self.canvas.update()
+                
+                self.reltilesize = self.map_data.get('map_info', {}).get('tilesize', 40)
+                
                 self.statusBar().showMessage(u"地图已加载: {}".format(map_name))
                 return True
         except Exception as e:
@@ -526,6 +608,8 @@ R：重置视图
             ex, ey = entity['position']
             if abs(ex - world_x) < 30 and abs(ey - world_y) < 30:
                 self.selected_entity = entity
+                self.selected_enemy = None
+                self.update_properties_panel()
                 return
         
         new_entity = {
@@ -534,6 +618,8 @@ R：重置视图
         }
         entities.append(new_entity)
         self.selected_entity = new_entity
+        self.selected_enemy = None
+        self.update_properties_panel()
     
     def add_or_select_enemy(self, world_x, world_y):
         """添加或选择敌人"""
@@ -543,6 +629,8 @@ R：重置视图
             ex, ey = enemy['spawn']
             if abs(ex - world_x) < 30 and abs(ey - world_y) < 30:
                 self.selected_enemy = enemy
+                self.selected_entity = None
+                self.update_properties_panel()
                 return
         
         new_enemy = {
@@ -552,12 +640,18 @@ R：重置视图
         }
         enemies.append(new_enemy)
         self.selected_enemy = new_enemy
+        self.selected_entity = None
+        self.update_properties_panel()
     
     def set_player_spawn(self, world_x, world_y):
         """设置玩家生成点"""
         spawn = self.map_data.get('playerSpawn', {})
         spawn['x'] = world_x
         spawn['y'] = world_y
+        # 清除其他选择，显示生成点属性
+        self.selected_entity = None
+        self.selected_enemy = None
+        self.update_properties_panel(spawn_selected=True)
     
     def keyPressEvent(self, event):
         """键盘事件"""
@@ -575,7 +669,7 @@ R：重置视图
             self.canvas.update()
         
         elif event.key() == Qt.Key.Key_R:
-            self.reset_to_center()
+            self.reset_to_center(event)
         
         elif event.key() == Qt.Key.Key_1:
             self.mode_combo.setCurrentIndex(0)
@@ -610,11 +704,111 @@ R：重置视图
         self.offset_y = int(cy - map_h / 2)
         self.zoom_spin.setValue(int(self.zoom * 100))
 
-    def reset_to_center(self):
+    def reset_to_center(self, event):
         """重置视图到居中"""
         self.center_view()
         self.canvas.update()
+
+        # 属性编辑快捷键（示例：方向键微调位置）
+        if self.selected_entity:
+            if event.key() == Qt.Key.Key_Left:
+                self.selected_entity['position'][0] -= 5
+            elif event.key() == Qt.Key.Key_Right:
+                self.selected_entity['position'][0] += 5
+            elif event.key() == Qt.Key.Key_Up:
+                self.selected_entity['position'][1] -= 5
+            elif event.key() == Qt.Key.Key_Down:
+                self.selected_entity['position'][1] += 5
+            self.canvas.update()
+            self.update_properties_panel()
+        elif self.selected_enemy:
+            if event.key() == Qt.Key.Key_Left:
+                self.selected_enemy['spawn'][0] -= 5
+            elif event.key() == Qt.Key.Key_Right:
+                self.selected_enemy['spawn'][0] += 5
+            elif event.key() == Qt.Key.Key_Up:
+                self.selected_enemy['spawn'][1] -= 5
+            elif event.key() == Qt.Key.Key_Down:
+                self.selected_enemy['spawn'][1] += 5
+            self.canvas.update()
+            self.update_properties_panel()
         self.save_last_state()
+
+    def update_properties_panel(self, spawn_selected=False):
+        """根据当前选中对象，刷新右侧属性编辑面板"""
+        # 清空现有控件
+        while self.props_layout.count():
+            item = self.props_layout.takeAt(0)
+            w = item.widget()
+            if w:
+                w.deleteLater()
+
+        if spawn_selected:
+            self.props_panel.setVisible(True)
+            self.props_layout.addWidget(QLabel(u"玩家生成点"))
+            sx = QSpinBox(); sy = QSpinBox()
+            sx.setRange(0, 100000); sy.setRange(0, 100000)
+            spawn = self.map_data.get('playerSpawn', {})
+            sx.setValue(int(spawn.get('x', 0)))
+            sy.setValue(int(spawn.get('y', 0)))
+            def apply_spawn():
+                self.map_data['playerSpawn']['x'] = sx.value()
+                self.map_data['playerSpawn']['y'] = sy.value()
+                self.canvas.update()
+            sx.valueChanged.connect(lambda _: apply_spawn())
+            sy.valueChanged.connect(lambda _: apply_spawn())
+            self.props_layout.addWidget(QLabel(u"X")); self.props_layout.addWidget(sx)
+            self.props_layout.addWidget(QLabel(u"Y")); self.props_layout.addWidget(sy)
+            return
+
+        if self.selected_entity:
+            self.props_panel.setVisible(True)
+            e = self.selected_entity
+            self.props_layout.addWidget(QLabel(u"实体属性"))
+            idspin = QSpinBox(); idspin.setRange(1, 100000); idspin.setValue(int(e.get('id', 1)))
+            xs = QSpinBox(); ys = QSpinBox()
+            xs.setRange(0, 100000); ys.setRange(0, 100000)
+            xs.setValue(int(e['position'][0])); ys.setValue(int(e['position'][1]))
+            def apply_entity():
+                e['id'] = idspin.value()
+                e['position'][0] = xs.value()
+                e['position'][1] = ys.value()
+                self.canvas.update()
+            idspin.valueChanged.connect(lambda _: apply_entity())
+            xs.valueChanged.connect(lambda _: apply_entity())
+            ys.valueChanged.connect(lambda _: apply_entity())
+            self.props_layout.addWidget(QLabel(u"ID")); self.props_layout.addWidget(idspin)
+            self.props_layout.addWidget(QLabel(u"X")); self.props_layout.addWidget(xs)
+            self.props_layout.addWidget(QLabel(u"Y")); self.props_layout.addWidget(ys)
+            return
+
+        if self.selected_enemy:
+            self.props_panel.setVisible(True)
+            en = self.selected_enemy
+            self.props_layout.addWidget(QLabel(u"敌人属性"))
+            idspin = QSpinBox(); idspin.setRange(1, 100000); idspin.setValue(int(en.get('id', 1)))
+            delayspin = QSpinBox(); delayspin.setRange(0, 100000); delayspin.setValue(int(en.get('delay', 0)))
+            xs = QSpinBox(); ys = QSpinBox()
+            xs.setRange(0, 100000); ys.setRange(0, 100000)
+            xs.setValue(int(en['spawn'][0])); ys.setValue(int(en['spawn'][1]))
+            def apply_enemy():
+                en['id'] = idspin.value()
+                en['delay'] = delayspin.value()
+                en['spawn'][0] = xs.value()
+                en['spawn'][1] = ys.value()
+                self.canvas.update()
+            idspin.valueChanged.connect(lambda _: apply_enemy())
+            delayspin.valueChanged.connect(lambda _: apply_enemy())
+            xs.valueChanged.connect(lambda _: apply_enemy())
+            ys.valueChanged.connect(lambda _: apply_enemy())
+            self.props_layout.addWidget(QLabel(u"ID")); self.props_layout.addWidget(idspin)
+            self.props_layout.addWidget(QLabel(u"延迟")); self.props_layout.addWidget(delayspin)
+            self.props_layout.addWidget(QLabel(u"X")); self.props_layout.addWidget(xs)
+            self.props_layout.addWidget(QLabel(u"Y")); self.props_layout.addWidget(ys)
+            return
+
+        # 没有选中任何对象
+        self.props_panel.setVisible(False)
 
     def load_config(self):
         """读取配置文件，若不存在则使用默认配置"""
